@@ -1,0 +1,4 @@
+temp/*
+log/*
+.idea/*
+phpunit.phar
