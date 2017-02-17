@@ -125,10 +125,11 @@ class ComponentReflection extends \ReflectionClass
 		foreach ($method->getParameters() as $i => $param) {
 			$name = $param->getName();
 			list($type, $isClass) = self::getParameterType($param);
+			$exception = $isClass ? Nette\InvalidArgumentException::class : BadRequestException::class;
 			if (isset($args[$name])) {
 				$res[$i] = $args[$name];
 				if (!self::convertType($res[$i], $type, $isClass)) {
-					throw new BadRequestException(sprintf(
+					throw new $exception(sprintf(
 						'Argument $%s passed to %s() must be %s, %s given.',
 						$name,
 						($method instanceof \ReflectionMethod ? $method->getDeclaringClass()->getName() . '::' : '') . $method->getName(),
@@ -143,7 +144,7 @@ class ComponentReflection extends \ReflectionClass
 			} elseif ($type === 'array') {
 				$res[$i] = [];
 			} else {
-				throw new BadRequestException(sprintf(
+				throw new $exception(sprintf(
 					'Missing parameter $%s required by %s()',
 					$name,
 					($method instanceof \ReflectionMethod ? $method->getDeclaringClass()->getName() . '::' : '') . $method->getName()
@@ -256,7 +257,7 @@ class ComponentReflection extends \ReflectionClass
 	/**
 	 * Returns an annotation value.
 	 * @param  string
-	 * @return mixed
+	 * @return string|NULL
 	 */
 	public function getAnnotation($name)
 	{
@@ -265,18 +266,12 @@ class ComponentReflection extends \ReflectionClass
 	}
 
 
-	/**
-	 * @return MethodReflection
-	 */
 	public function getMethod($name)
 	{
 		return new MethodReflection($this->getName(), $name);
 	}
 
 
-	/**
-	 * @return MethodReflection[]
-	 */
 	public function getMethods($filter = -1)
 	{
 		foreach ($res = parent::getMethods($filter) as $key => $val) {

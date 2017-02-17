@@ -78,8 +78,8 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Read from cache.
-	 * @param  string
-	 * @return mixed
+	 * @param  string key
+	 * @return mixed|NULL
 	 */
 	public function read($key)
 	{
@@ -112,7 +112,7 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Reads from cache in bulk.
-	 * @param  string
+	 * @param  string key
 	 * @return array key => value pairs, missing items are omitted
 	 */
 	public function bulkRead(array $keys)
@@ -145,7 +145,7 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
-	 * @param  string
+	 * @param  string key
 	 * @return void
 	 */
 	public function lock($key)
@@ -155,8 +155,9 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Writes item into the cache.
-	 * @param  string
-	 * @param  mixed
+	 * @param  string key
+	 * @param  mixed  data
+	 * @param  array  dependencies
 	 * @return void
 	 */
 	public function write($key, $data, array $dp)
@@ -195,7 +196,7 @@ class NewMemcachedStorage implements Nette\Caching\IStorage, Nette\Caching\IBulk
 
 	/**
 	 * Removes item from the cache.
-	 * @param  string
+	 * @param  string key
 	 * @return void
 	 */
 	public function remove($key)

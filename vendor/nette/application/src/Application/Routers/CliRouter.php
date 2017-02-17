@@ -95,10 +95,11 @@ class CliRouter implements Application\IRouter
 
 	/**
 	 * This router is only unidirectional.
-	 * @return void
+	 * @return NULL
 	 */
 	public function constructUrl(Application\Request $appRequest, Nette\Http\Url $refUrl)
 	{
+		return NULL;
 	}
 
 

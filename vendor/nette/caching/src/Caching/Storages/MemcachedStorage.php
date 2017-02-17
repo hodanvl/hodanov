@@ -78,8 +78,8 @@ class MemcachedStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Read from cache.
-	 * @param  string
-	 * @return mixed
+	 * @param  string key
+	 * @return mixed|NULL
 	 */
 	public function read($key)
 	{
@@ -112,7 +112,7 @@ class MemcachedStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Prevents item reading and writing. Lock is released by write() or remove().
-	 * @param  string
+	 * @param  string key
 	 * @return void
 	 */
 	public function lock($key)
@@ -122,8 +122,9 @@ class MemcachedStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Writes item into the cache.
-	 * @param  string
-	 * @param  mixed
+	 * @param  string key
+	 * @param  mixed  data
+	 * @param  array  dependencies
 	 * @return void
 	 */
 	public function write($key, $data, array $dp)
@@ -162,7 +163,7 @@ class MemcachedStorage implements Nette\Caching\IStorage
 
 	/**
 	 * Removes item from the cache.
-	 * @param  string
+	 * @param  string key
 	 * @return void
 	 */
 	public function remove($key)

@@ -36,7 +36,7 @@ class ErrorPresenter implements Application\IPresenter
 	{
 		$e = $request->getParameter('exception');
 		if ($e instanceof Application\BadRequestException) {
-			$code = $e->getHttpCode();
+			$code = $e->getCode();
 		} else {
 			$code = 500;
 			if ($this->logger) {

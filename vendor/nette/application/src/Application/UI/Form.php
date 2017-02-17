@@ -45,9 +45,9 @@ class Form extends Nette\Forms\Form implements ISignalReceiver
 	 * @param  bool   throw exception if presenter doesn't exist?
 	 * @return Presenter|NULL
 	 */
-	public function getPresenter($throw = TRUE)
+	public function getPresenter($need = TRUE)
 	{
-		return $this->lookup(Presenter::class, $throw);
+		return $this->lookup(Presenter::class, $need);
 	}
 
 

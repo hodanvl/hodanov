@@ -69,7 +69,7 @@ class SQLiteJournal implements IJournal
 	 * Writes entry information into the journal.
 	 * @param  string
 	 * @param  array
-	 * @return void
+	 * @return bool
 	 */
 	public function write($key, array $dependencies)
 	{
@@ -95,6 +95,8 @@ class SQLiteJournal implements IJournal
 		}
 
 		$this->pdo->exec('COMMIT');
+
+		return TRUE;
 	}
 
 

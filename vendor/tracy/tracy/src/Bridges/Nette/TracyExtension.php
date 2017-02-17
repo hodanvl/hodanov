@@ -30,7 +30,6 @@ class TracyExtension extends Nette\DI\CompilerExtension
 		'scream' => NULL,
 		'bar' => [], // of class name
 		'blueScreen' => [], // of callback
-		'editorMapping' => [],
 	];
 
 	/** @var bool */

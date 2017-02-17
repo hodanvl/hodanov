@@ -34,9 +34,9 @@ abstract class Component extends Nette\ComponentModel\Container implements ISign
 	 * @param  bool   throw exception if presenter doesn't exist?
 	 * @return Presenter|NULL
 	 */
-	public function getPresenter($throw = TRUE)
+	public function getPresenter($need = TRUE)
 	{
-		return $this->lookup(Presenter::class, $throw);
+		return $this->lookup(Presenter::class, $need);
 	}
 
 
@@ -371,10 +371,7 @@ abstract class Component extends Nette\ComponentModel\Container implements ISign
 	{
 		$args = func_num_args() < 3 && is_array($args) ? $args : array_slice(func_get_args(), 1);
 		$presenter = $this->getPresenter();
-		$presenter->redirectUrl(
-			$presenter->createRequest($this, $destination, $args, 'redirect'),
-			Nette\Http\IResponse::S301_MOVED_PERMANENTLY
-		);
+		$presenter->redirectUrl($presenter->createRequest($this, $destination, $args, 'redirect'), 301);
 	}
 
 

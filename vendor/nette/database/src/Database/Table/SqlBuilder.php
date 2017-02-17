@@ -112,18 +112,12 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @param  string
-	 */
 	public function buildInsertQuery()
 	{
 		return "INSERT INTO {$this->delimitedTable}";
 	}
 
 
-	/**
-	 * @param  string
-	 */
 	public function buildUpdateQuery()
 	{
 		$query = "UPDATE {$this->delimitedTable} SET ?set" . $this->tryDelimite($this->buildConditions());
@@ -135,9 +129,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @param  string
-	 */
 	public function buildDeleteQuery()
 	{
 		$query = "DELETE FROM {$this->delimitedTable}" . $this->tryDelimite($this->buildConditions());
@@ -153,7 +144,7 @@ class SqlBuilder
 	 * Returns select query hash for caching.
 	 * @return string
 	 */
-	public function getSelectQueryHash(array $columns = NULL)
+	public function getSelectQueryHash($columns = NULL)
 	{
 		$parts = [
 			'delimitedTable' => $this->delimitedTable,
@@ -184,10 +175,10 @@ class SqlBuilder
 
 	/**
 	 * Returns SQL query.
-	 * @param  string[] list of columns
+	 * @param  string list of columns
 	 * @return string
 	 */
-	public function buildSelectQuery(array $columns = NULL)
+	public function buildSelectQuery($columns = NULL)
 	{
 		if (!$this->order && ($this->limit !== NULL || $this->offset)) {
 			$this->order = array_map(
@@ -235,9 +226,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	public function getParameters()
 	{
 		if (!isset($this->parameters['joinConditionSorted'])) {
@@ -279,27 +267,18 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	public function getSelect()
 	{
 		return $this->select;
 	}
 
 
-	/**
-	 * @return bool
-	 */
 	public function addWhere($condition, ...$params)
 	{
 		return $this->addCondition($condition, $params, $this->where, $this->parameters['where']);
 	}
 
 
-	/**
-	 * @return array
-	 */
 	public function addJoinCondition($tableChain, $condition, ...$params)
 	{
 		$this->parameters['joinConditionSorted'] = NULL;
@@ -310,10 +289,7 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	protected function addCondition($condition, array $params, array &$conditions, array &$conditionsParameters)
+	protected function addCondition($condition, array $params, array & $conditions, array & $conditionsParameters)
 	{
 		if (is_array($condition) && !empty($params[0]) && is_array($params[0])) {
 			return $this->addConditionComposition($condition, $params[0], $conditions, $conditionsParameters);
@@ -429,9 +405,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	public function getConditions()
 	{
 		return array_values($this->conditions);
@@ -440,8 +413,6 @@ class SqlBuilder
 
 	/**
 	 * Adds alias.
-	 * @param  string
-	 * @param  string
 	 * @return void
 	 */
 	public function addAlias($chain, $alias)
@@ -454,11 +425,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @param  string
-	 * @param  string
-	 * @return void
-	 */
 	protected function checkUniqueTableName($tableName, $chain)
 	{
 		if (isset($this->aliases[$tableName]) && ('.' . $tableName === $chain)) {
@@ -468,7 +434,7 @@ class SqlBuilder
 			if ($this->reservedTableNames[$tableName] === $chain) {
 				return;
 			}
-			throw new Nette\InvalidArgumentException("Table alias '$tableName' from chain '$chain' is already in use by chain '{$this->reservedTableNames[$tableName]}'. Please add/change alias for one of them.");
+			throw new \Nette\InvalidArgumentException("Table alias '$tableName' from chain '$chain' is already in use by chain '{$this->reservedTableNames[$tableName]}'. Please add/change alias for one of them.");
 		}
 		$this->reservedTableNames[$tableName] = $chain;
 	}
@@ -488,20 +454,12 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	public function getOrder()
 	{
 		return $this->order;
 	}
 
 
-	/**
-	 * @param  int|NULL
-	 * @param  int|NULL
-	 * @return void
-	 */
 	public function setLimit($limit, $offset)
 	{
 		$this->limit = $limit;
@@ -509,18 +467,12 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return int|NULL
-	 */
 	public function getLimit()
 	{
 		return $this->limit;
 	}
 
 
-	/**
-	 * @return int|NULL
-	 */
 	public function getOffset()
 	{
 		return $this->offset;
@@ -534,9 +486,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getGroup()
 	{
 		return $this->group;
@@ -550,9 +499,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getHaving()
 	{
 		return $this->having;
@@ -562,29 +508,23 @@ class SqlBuilder
 	/********************* SQL building ****************d*g**/
 
 
-	/**
-	 * @return string
-	 */
 	protected function buildSelect(array $columns)
 	{
 		return 'SELECT ' . implode(', ', $columns);
 	}
 
 
-	/**
-	 * @return array
-	 */
-	protected function parseJoinConditions(&$joins, $joinConditions)
+	protected function parseJoinConditions(& $joins, $joinConditions)
 	{
 		$tableJoins = $leftJoinDependency = $finalJoinConditions = [];
-		foreach ($joinConditions as $tableChain => &$joinCondition) {
+		foreach ($joinConditions as $tableChain => & $joinCondition) {
 			$fooQuery = $tableChain . '.foo';
 			$requiredJoins = [];
 			$this->parseJoins($requiredJoins, $fooQuery);
 			$tableAlias = substr($fooQuery, 0, -4);
 			$tableJoins[$tableAlias] = $requiredJoins;
 			$leftJoinDependency[$tableAlias] = [];
-			$finalJoinConditions[$tableAlias] = preg_replace_callback($this->getColumnChainsRegxp(), function ($match) use ($tableAlias, &$tableJoins, &$leftJoinDependency) {
+			$finalJoinConditions[$tableAlias] = preg_replace_callback($this->getColumnChainsRegxp(), function ($match) use ($tableAlias, & $tableJoins, & $leftJoinDependency) {
 				$requiredJoins = [];
 				$query = $this->parseJoinsCb($requiredJoins, $match);
 				$queryParts = explode('.', $query);
@@ -607,7 +547,7 @@ class SqlBuilder
 	}
 
 
-	protected function getSortedJoins($table, &$leftJoinDependency, &$tableJoins, &$finalJoins)
+	protected function getSortedJoins($table, & $leftJoinDependency, & $tableJoins, & $finalJoins)
 	{
 		if (isset($this->expandingJoins[$table])) {
 			$path = implode("' => '", array_map(function($value) { return $this->reservedTableNames[$value]; }, array_merge(array_keys($this->expandingJoins), [$table])));
@@ -632,9 +572,8 @@ class SqlBuilder
 				}
 			}
 			$finalJoins += $tableJoins[$table];
-			$key = isset($this->aliases[$table]) ? $table : $this->reservedTableNames[$table];
-			$this->parameters['joinConditionSorted'] += isset($this->parameters['joinCondition'][$key])
-				? [$table => $this->parameters['joinCondition'][$key]]
+			$this->parameters['joinConditionSorted'] += isset($this->parameters['joinCondition'][$this->reservedTableNames[$table]])
+				? [$table => $this->parameters['joinCondition'][$this->reservedTableNames[$table]]]
 				: [];
 			unset($tableJoins[$table]);
 			unset($this->expandingJoins[$table]);
@@ -642,17 +581,14 @@ class SqlBuilder
 	}
 
 
-	protected function parseJoins(&$joins, &$query)
+	protected function parseJoins(& $joins, & $query)
 	{
-		$query = preg_replace_callback($this->getColumnChainsRegxp(), function ($match) use (&$joins) {
+		$query = preg_replace_callback($this->getColumnChainsRegxp(), function ($match) use (& $joins) {
 			return $this->parseJoinsCb($joins, $match);
 		}, $query);
 	}
 
 
-	/**
-	 * @return string
-	 */
 	private function getColumnChainsRegxp()
 	{
 		return '~
@@ -666,10 +602,7 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
-	public function parseJoinsCb(&$joins, $match)
+	public function parseJoinsCb(& $joins, $match)
 	{
 		$chain = $match['chain'];
 		if (!empty($chain[0]) && ($chain[0] !== '.' && $chain[0] !== ':')) {
@@ -775,9 +708,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
 	protected function buildQueryJoins(array $joins, array $leftJoinConditions = [])
 	{
 		$return = '';
@@ -791,9 +721,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	protected function buildJoinConditions()
 	{
 		$conditions = [];
@@ -804,18 +731,12 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
 	protected function buildConditions()
 	{
 		return $this->where ? ' WHERE (' . implode(') AND (', $this->where) . ')' : '';
 	}
 
 
-	/**
-	 * @return string
-	 */
 	protected function buildQueryEnd()
 	{
 		$return = '';
@@ -832,9 +753,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
 	protected function tryDelimite($s)
 	{
 		return preg_replace_callback('#(?<=[^\w`"\[?]|^)[a-z_][a-z0-9_]*(?=[^\w`"(\]]|\z)#i', function ($m) {
@@ -843,10 +761,7 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return bool
-	 */
-	protected function addConditionComposition(array $columns, array $parameters, array &$conditions, array &$conditionsParameters)
+	protected function addConditionComposition(array $columns, array $parameters, array & $conditions, array & $conditionsParameters)
 	{
 		if ($this->driver->isSupported(ISupplementalDriver::SUPPORT_MULTI_COLUMN_AS_OR_COND)) {
 			$conditionFragment = '(' . implode(' = ? AND ', $columns) . ' = ?) OR ';
@@ -858,12 +773,9 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return string
-	 */
-	private function getConditionHash($condition, array $parameters)
+	private function getConditionHash($condition, $parameters)
 	{
-		foreach ($parameters as $key => &$parameter) {
+		foreach ($parameters as $key => & $parameter) {
 			if ($parameter instanceof Selection) {
 				$parameter = $this->getConditionHash($parameter->getSql(), $parameter->getSqlBuilder()->getParameters());
 			} elseif ($parameter instanceof SqlLiteral) {
@@ -878,9 +790,6 @@ class SqlBuilder
 	}
 
 
-	/**
-	 * @return array
-	 */
 	private function getCachedTableList()
 	{
 		if (!$this->cacheTableList) {

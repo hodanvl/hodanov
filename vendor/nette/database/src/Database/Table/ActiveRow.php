@@ -82,16 +82,16 @@ class ActiveRow implements \IteratorAggregate, IRow
 	 * @param  bool
 	 * @return mixed possible int, string, array, object (Nette\Utils\DateTime)
 	 */
-	public function getPrimary($throw = TRUE)
+	public function getPrimary($need = TRUE)
 	{
-		$primary = $this->table->getPrimary($throw);
+		$primary = $this->table->getPrimary($need);
 		if ($primary === NULL) {
 			return NULL;
 
 		} elseif (!is_array($primary)) {
 			if (isset($this->data[$primary])) {
 				return $this->data[$primary];
-			} elseif ($throw) {
+			} elseif ($need) {
 				throw new Nette\InvalidStateException("Row does not contain primary $primary column data.");
 			} else {
 				return NULL;
@@ -101,7 +101,7 @@ class ActiveRow implements \IteratorAggregate, IRow
 			$primaryVal = [];
 			foreach ($primary as $key) {
 				if (!isset($this->data[$key])) {
-					if ($throw) {
+					if ($need) {
 						throw new Nette\InvalidStateException("Row does not contain primary $key column data.");
 					} else {
 						return NULL;
@@ -119,9 +119,9 @@ class ActiveRow implements \IteratorAggregate, IRow
 	 * @param  bool
 	 * @return string
 	 */
-	public function getSignature($throw = TRUE)
+	public function getSignature($need = TRUE)
 	{
-		return implode('|', (array) $this->getPrimary($throw));
+		return implode('|', (array) $this->getPrimary($need));
 	}
 
 
@@ -129,7 +129,7 @@ class ActiveRow implements \IteratorAggregate, IRow
 	 * Returns referenced row.
 	 * @param  string
 	 * @param  string
-	 * @return IRow|NULL if the row does not exist
+	 * @return IRow or NULL if the row does not exist
 	 */
 	public function ref($key, $throughColumn = NULL)
 	{
@@ -161,7 +161,7 @@ class ActiveRow implements \IteratorAggregate, IRow
 
 	/**
 	 * Updates row.
-	 * @param  iterable (column => value)
+	 * @param  array|\Traversable (column => value)
 	 * @return bool
 	 */
 	public function update($data)
@@ -228,50 +228,50 @@ class ActiveRow implements \IteratorAggregate, IRow
 
 	/**
 	 * Stores value in column.
-	 * @param  string
-	 * @param  mixed
+	 * @param  string column name
+	 * @param  string value
 	 * @return void
 	 */
-	public function offsetSet($column, $value)
+	public function offsetSet($key, $value)
 	{
-		$this->__set($column, $value);
+		$this->__set($key, $value);
 	}
 
 
 	/**
 	 * Returns value of column.
-	 * @param  string
-	 * @return mixed
+	 * @param  string column name
+	 * @return string
 	 */
-	public function offsetGet($column)
+	public function offsetGet($key)
 	{
-		return $this->__get($column);
+		return $this->__get($key);
 	}
 
 
 	/**
 	 * Tests if column exists.
-	 * @param  string
+	 * @param  string column name
 	 * @return bool
 	 */
-	public function offsetExists($column)
+	public function offsetExists($key)
 	{
-		return $this->__isset($column);
+		return $this->__isset($key);
 	}
 
 
 	/**
 	 * Removes column from data.
-	 * @param  string
+	 * @param  string column name
 	 * @return void
 	 */
-	public function offsetUnset($column)
+	public function offsetUnset($key)
 	{
-		$this->__unset($column);
+		$this->__unset($key);
 	}
 
 
-	public function __set($column, $value)
+	public function __set($key, $value)
 	{
 		throw new Nette\DeprecatedException('ActiveRow is read-only; use update() method instead.');
 	}

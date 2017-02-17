@@ -37,6 +37,7 @@ class OutputHelper
 
 	/**
 	 * Stops and saves the cache.
+	 * @param  array  dependencies
 	 * @return void
 	 */
 	public function end(array $dependencies = NULL)

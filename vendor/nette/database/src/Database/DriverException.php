@@ -18,7 +18,7 @@ class DriverException extends \PDOException
 
 
 	/**
-	 * @return static
+	 * @return self
 	 */
 	public static function from(\PDOException $src)
 	{

@@ -32,7 +32,7 @@ class MethodReflection extends \ReflectionMethod
 	/**
 	 * Returns an annotation value.
 	 * @param  string
-	 * @return mixed
+	 * @return string|NULL
 	 */
 	public function getAnnotation($name)
 	{

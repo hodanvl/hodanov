@@ -22,17 +22,17 @@ class RedirectResponse implements Nette\Application\IResponse
 	private $url;
 
 	/** @var int */
-	private $httpCode;
+	private $code;
 
 
 	/**
 	 * @param  string  URI
 	 * @param  int     HTTP code 3xx
 	 */
-	public function __construct($url, $httpCode = Http\IResponse::S302_FOUND)
+	public function __construct($url, $code = Http\IResponse::S302_FOUND)
 	{
 		$this->url = (string) $url;
-		$this->httpCode = (int) $httpCode;
+		$this->code = (int) $code;
 	}
 
 
@@ -50,7 +50,7 @@ class RedirectResponse implements Nette\Application\IResponse
 	 */
 	public function getCode()
 	{
-		return $this->httpCode;
+		return $this->code;
 	}
 
 
@@ -60,7 +60,7 @@ class RedirectResponse implements Nette\Application\IResponse
 	 */
 	public function send(Http\IRequest $httpRequest, Http\IResponse $httpResponse)
 	{
-		$httpResponse->redirect($this->url, $this->httpCode);
+		$httpResponse->redirect($this->url, $this->code);
 	}
 
 }

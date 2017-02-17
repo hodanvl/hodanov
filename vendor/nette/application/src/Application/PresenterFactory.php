@@ -136,7 +136,7 @@ class PresenterFactory implements IPresenterFactory
 	/**
 	 * Formats presenter name from class name.
 	 * @param  string
-	 * @return string|NULL
+	 * @return string
 	 * @internal
 	 */
 	public function unformatPresenterClass($class)
@@ -148,7 +148,6 @@ class PresenterFactory implements IPresenterFactory
 					. preg_replace("#$mapping[1]#iA", '$1:', $matches[1]) . $matches[3];
 			}
 		}
-		return NULL;
 	}
 
 }

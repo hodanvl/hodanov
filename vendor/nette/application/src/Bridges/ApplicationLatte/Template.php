@@ -130,7 +130,7 @@ class Template implements Nette\Application\UI\ITemplate
 
 
 	/**
-	 * @return string|NULL
+	 * @return string
 	 */
 	public function getFile()
 	{
