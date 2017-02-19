@@ -1,0 +1,20 @@
+{block title}{$post->title}{/block}
+{block content}
+    <a n:href="edit $post->id">Upravit příspěvek</a>
+    <p><a n:href="Homepage:default">← Zpět na výpis příspěvků</a></p>
+    <div class="date">{$post->date|date:'F j, Y'}</div>
+    <h1>{$post->title}</h1>
+    <section>{$post->content|noescape}</section>
+
+    <h3>Komentáře</h3>
+    {if count($comments)==0}<em>Nejsou zde zatím žádné komentáře</em>
+    {else}
+        {foreach $comments as $comment}
+            <div class="box">
+                <p><b>{$comment->user}</a></b> napsal:</p>
+                <div>{$comment->content}</div>
+            </div>
+        {/foreach}
+    {/if}
+    {control commentForm}
+{/block}

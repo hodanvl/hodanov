@@ -3,16 +3,25 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-
+	<link href="{$basePath}/css/style.css" rel="stylesheet" type="text/css">
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
 </head>
 
 <body>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 
-	{include content}
+	<div class="box">
+        <h1>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</h1>
+		<a n:href='Post:create'>Vytvořit nový Příspěvek</a>
+	</div>
+	{if $flashes}
+		<div class="box">
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div></div>
+	{/if}
+	<div class="box">
+    {include content}
+	</div>
 
-	{block scripts}
+    {block scripts}
 	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
 	{/block}
 </body>
